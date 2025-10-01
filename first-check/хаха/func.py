@@ -71,15 +71,6 @@ def save_list_to_file(data, filename):
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
-def save_list_to_file_one_line(data, filename):
-    """
-    Сохраняет каждый элемент списка логов в отдельную строку в файле.
-    """
-    with open(filename, "w", encoding="utf-8") as f:
-        for log in data:
-            json_line = json.dumps(log, ensure_ascii=False)
-            f.write(json_line + "\n")
-
 def sort_logs_by_level(logs):
     """
     Сортирует список логов по заданной градации LEVEL_ORDER.
