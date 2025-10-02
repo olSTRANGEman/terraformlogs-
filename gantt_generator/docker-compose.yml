@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  gantt-generator:
+    build: .
+    container_name: gantt_generator
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      sh -c "
+        echo 'Запуск парсера...' &&
+        python parser_gantt.py &&
+        echo 'Генерация диаграмм...' &&
+        python gantt_visualizer.py &&
+        echo 'Готово! Проверьте файлы в директории output'"
+    
+  gantt-visualizer:
+    build: .
+    container_name: gantt_visualizer
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+    ports:
+      - "8050:8050"
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: >
+      sh -c "
+        echo 'Запуск интерактивного сервера...' &&
+        python -m http.server 8050 --directory output"
+    depends_on:
+      - gantt-generator
